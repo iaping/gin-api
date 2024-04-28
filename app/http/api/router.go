@@ -18,17 +18,19 @@ type IRouter interface {
 	POST(string, HandlerFunc) IRouter
 	PUT(string, HandlerFunc) IRouter
 	DELETE(string, HandlerFunc) IRouter
+
+	App() *ctx.Ctx
 }
 
 type Router struct {
 	gin.IRouter
-	ctx *ctx.Ctx
+	app *ctx.Ctx
 }
 
-func NewRouter(router gin.IRouter, ctx *ctx.Ctx) *Router {
+func NewRouter(router gin.IRouter, app *ctx.Ctx) *Router {
 	return &Router{
 		IRouter: router,
-		ctx:     ctx,
+		app:     app,
 	}
 }
 
@@ -44,7 +46,11 @@ func (r *Router) Use(args ...gin.HandlerFunc) IRouter {
 }
 
 func (r *Router) Group(path string) IRouter {
-	return NewRouter(r.IRouter.Group(path), r.ctx)
+	return NewRouter(r.IRouter.Group(path), r.app)
+}
+
+func (r *Router) App() *ctx.Ctx {
+	return r.app
 }
 
 func (r *Router) GET(path string, handler HandlerFunc) IRouter {
@@ -78,7 +84,7 @@ func (r *Router) DELETE(path string, handler HandlerFunc) IRouter {
 func (r *Router) handle(ctx *gin.Context, handler HandlerFunc) {
 	var resp Response
 
-	if data, err := handler(&Ctx{Gin: ctx, App: r.ctx}); err != nil {
+	if data, err := handler(&Ctx{Gin: ctx, App: r.app}); err != nil {
 		log.Err(err).Msgf("path: %s", ctx.Request.URL.Path)
 		resp = r.error(err)
 	} else {
