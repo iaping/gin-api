@@ -89,12 +89,16 @@ func (r *Router) handle(ctx *gin.Context, handler HandlerFunc) {
 }
 
 func (r *Router) error(err error) Response {
+	var i *Error
+
 	switch e := err.(type) {
 	case *Error:
-		return NewErrorResponse(e)
+		i = e
 	case validator.ValidationErrors:
-		return NewErrorResponse(ErrorParameter)
+		i = ErrorParameter
+	default:
+		i = ErrorServer
 	}
 
-	return NewErrorResponse(ErrorServer)
+	return NewErrorResponse(i)
 }
