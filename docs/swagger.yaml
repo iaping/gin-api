@@ -1,0 +1,57 @@
+info:
+  contact: {}
+  description: gin-api is a basic api framework developed based on gin
+  title: gin-api
+  version: v1
+paths:
+  /v1/example/error:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: 错误（接口不会暴露错误信息，应对一些未知或未处理的错误）
+      tags:
+      - Example
+  /v1/example/error/custom:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: 自定义错误（接口会暴露错误信息，需要定义好错误的相关信息）
+      tags:
+      - Example
+  /v1/example/helloworld:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: hello world
+      tags:
+      - Example
+  /v1/example/mysql:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: mysql示例
+      tags:
+      - Example
+  /v1/example/redis:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: redis示例
+      tags:
+      - Example
+swagger: "2.0"
