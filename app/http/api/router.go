@@ -85,7 +85,7 @@ func (r *Router) handle(ctx *gin.Context, handler HandlerFunc) {
 	var resp Response
 
 	if data, err := handler(&Ctx{Gin: ctx, App: r.app}); err != nil {
-		log.Err(err).Msgf("path: %s", ctx.Request.URL.Path)
+		log.Err(err).Str("Path", ctx.Request.URL.Path).Msg("Api")
 		resp = r.error(err)
 	} else {
 		resp = NewResponse(data)
